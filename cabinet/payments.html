@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>История оплат | Инженерные системы Томск</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="../" class="logo">
+        <i class="fas fa-microchip"></i>
+        <span>Инженерные системы</span>
+      </a>
+      <div class="menu-toggle" id="menuToggle">
+        <i class="fas fa-bars"></i>
+      </div>
+    </div>
+  </nav>
+
+  <div class="cabinet-container">
+    <div class="cabinet-header">
+      <div class="cabinet-title">
+        <h1>История оплат</h1>
+        <p>Все совершенные платежи</p>
+      </div>
+      <div class="cabinet-actions">
+        <a href="../" class="back-home-btn">
+          <i class="fas fa-arrow-left"></i> На главную
+        </a>
+        <button class="logout-btn" id="logoutBtn">
+          <i class="fas fa-sign-out-alt"></i> Выйти
+        </button>
+      </div>
+    </div>
+
+    <div class="cabinet-nav">
+      <a href="dashboard.html" class="cabinet-nav-link">Главная</a>
+      <a href="contracts.html" class="cabinet-nav-link">Мои договоры</a>
+      <a href="payments.html" class="cabinet-nav-link active">История оплат</a>
+      <a href="profile.html" class="cabinet-nav-link">Настройки профиля</a>
+    </div>
+
+    <div class="table-container">
+      <table class="data-table" id="paymentsTable">
+        <thead>
+          <tr><th>№ договора</th><th>Сумма</th><th>Дата платежа</th><th>Способ оплаты</th><th>Статус</th> </thead>
+        <tbody>
+          <tr><td colspan="5" style="text-align: center;">Загрузка.../td> </tbody>
+        </table>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase-client.js"></script>
+  <script>
+    const SUPABASE_URL = 'https://dtuipgbsupodwvxlwmse.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0dWlwZ2JzdXBvZHd2eGx3bXNlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzMzUxNzIsImV4cCI6MjA4OTkxMTE3Mn0.ABaA7-D4jU_64bFGQQZc3J4-0TUH5Lz8PjhqobK8ZvI';
+    
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const session = await window.supabaseCheckAuth();
+        if (!session) {
+          window.location.href = 'login.html';
+          return;
+        }
+        
+        const user = await window.supabaseGetCurrentUser();
+        if (!user) {
+          window.location.href = 'login.html';
+          return;
+        }
+        
+        // Получаем платежи с информацией о договоре
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/payments?user_id=eq.${user.id}&select=*,contracts(contract_number,pdf_url)&order=payment_date.desc`, {
+          headers: {
+            'apikey': SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+          }
+        });
+        const payments = await response.json();
+        
+        const tableBody = document.getElementById('paymentsTable').querySelector('tbody');
+        tableBody.innerHTML = '';
+        
+        const methodText = {
+          'card': 'Банковская карта',
+          'cash': 'Наличные',
+          'transfer': 'Банковский перевод'
+        };
+        
+        if (payments.length === 0) {
+          tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center;">История оплат пуста</td></tr>';
+        } else {
+          payments.forEach(payment => {
+            const row = tableBody.insertRow();
+            
+            const contractNumber = payment.contracts?.contract_number || '—';
+            const pdfUrl = payment.contracts?.pdf_url;
+            
+            const numberCell = row.insertCell(0);
+            if (pdfUrl) {
+              numberCell.innerHTML = `<a href="${pdfUrl}" target="_blank" style="color: var(--primary); text-decoration: none; font-weight: 600;">${contractNumber}</a>`;
+            } else {
+              numberCell.textContent = contractNumber;
+            }
+            
+            row.insertCell(1).innerHTML = `<strong>${payment.amount.toLocaleString()} ₽</strong>`;
+            row.insertCell(2).textContent = new Date(payment.payment_date).toLocaleDateString('ru-RU');
+            row.insertCell(3).textContent = methodText[payment.payment_method] || payment.payment_method || '—';
+            row.insertCell(4).innerHTML = `<span class="status-badge status-paid">Оплачено</span>`;
+          });
+        }
+        
+        const logoutBtn = document.getElementById('logoutBtn');
+        if (logoutBtn) {
+          logoutBtn.addEventListener('click', async () => {
+            await window.supabaseLogout();
+          });
+        }
+        
+      } catch (error) {
+        console.error('Ошибка:', error);
+        window.location.href = 'login.html';
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Инженерные системы Томск | Водоснабжение, отопление, пожарная безопасность</title>
+  <meta name="description" content="Профессиональный монтаж инженерных систем для коттеджей в Томске. 23+ года опыта. Личный кабинет клиента.">
+  <meta name="keywords" content="инженерные системы Томск, монтаж отопления, водоснабжение коттеджа, пожарная безопасность дома, калькулятор отопления">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="./" class="logo">
+        <i class="fas fa-microchip"></i>
+        <span>Инженерные системы</span>
+      </a>
+      <div class="nav-links" id="navLinks">
+        <a href="#home" class="nav-link">Главная</a>
+        <a href="#services" class="nav-link">Услуги</a>
+        <a href="#calculator" class="nav-link">Калькулятор</a>
+        <a href="#portfolio" class="nav-link">Объекты</a>
+        <a href="#stages" class="nav-link">Этапы</a>
+        <a href="#reviews" class="nav-link">Отзывы</a>
+        <a href="#contact" class="nav-link">Контакты</a>
+      </div>
+      <div class="nav-right">
+        <div class="nav-phone">
+          <a href="tel:+79095406644" class="phone-link">
+            <i class="fas fa-phone-alt"></i>
+            <span>8 909 540 66 44</span>
+          </a>
+        </div>
+        <div id="authSection">
+          <a href="cabinet/login.html" class="login-link" id="loginLink">
+            <i class="fas fa-sign-in-alt"></i>
+            <span>Войти</span>
+          </a>
+          <div class="avatar-wrapper" id="avatarWrapper" style="display: none;">
+            <div class="avatar" id="avatarBtn">
+              <i class="fas fa-user"></i>
+            </div>
+            <div class="dropdown-menu" id="dropdownMenu">
+              <a href="cabinet/dashboard.html" class="dropdown-item">
+                <i class="fas fa-tachometer-alt"></i> Личный кабинет
+              </a>
+              <a href="cabinet/contracts.html" class="dropdown-item">
+                <i class="fas fa-file-contract"></i> Мои договоры
+              </a>
+              <a href="cabinet/payments.html" class="dropdown-item">
+                <i class="fas fa-credit-card"></i> История оплат
+              </a>
+              <a href="cabinet/profile.html" class="dropdown-item">
+                <i class="fas fa-user-cog"></i> Настройки профиля
+              </a>
+              <div class="dropdown-divider"></div>
+              <a href="./" class="dropdown-item" id="goToMain">
+                <i class="fas fa-home"></i> На главную
+              </a>
+              <div class="dropdown-divider"></div>
+              <div class="dropdown-item" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i> Выйти
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="menu-toggle" id="menuToggle">
+        <i class="fas fa-bars"></i>
+      </div>
+    </div>
+  </nav>
+
+  <section id="home" class="hero">
+    <div class="hero-bg"></div>
+    <div class="container hero-container">
+      <div class="hero-content" data-aos="fade-up">
+        <div class="hero-badge">
+          <i class="fas fa-bolt"></i> Инженерная экспертиза
+        </div>
+        <h1 class="hero-title">
+          Инженерные системы <span class="accent">для коттеджей</span>
+        </h1>
+        <p class="hero-desc">
+          Водоснабжение • Отопление • Пожарная безопасность<br>
+          Полный цикл монтажа в Томске и области
+        </p>
+        <div class="hero-buttons">
+          <button class="btn btn-primary" id="openRequestModal">
+            <i class="fas fa-calendar-check"></i> Записаться на просмотр объекта
+          </button>
+          <a href="#calculator" class="btn btn-outline">
+            <i class="fas fa-calculator"></i> Рассчитать стоимость
+          </a>
+          <a href="checkout.html" class="btn btn-outline">
+            <i class="fas fa-shopping-cart"></i> Заказать услугу
+          </a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat"><span class="stat-number">23+</span><span class="stat-label">лет опыта</span></div>
+          <div class="stat"><span class="stat-number">78</span><span class="stat-label">реализованных объектов</span></div>
+          <div class="stat"><span class="stat-number">100%</span><span class="stat-label">гарантия качества</span></div>
+        </div>
+      </div>
+      <div class="hero-visual" data-aos="fade-left">
+        <div class="tech-sphere">
+          <i class="fas fa-drafting-compass"></i>
+          <i class="fas fa-water"></i>
+          <i class="fas fa-fire-extinguisher"></i>
+          <i class="fas fa-temperature-high"></i>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="services" class="services">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Что мы делаем</span>
+        <h2 class="section-title">Инженерные решения <span class="accent">премиум-класса</span></h2>
+        <p class="section-desc">Современный подход, надежные материалы, точный монтаж — ваш дом будет работать как единый интеллектуальный организм.</p>
+      </div>
+      <div class="services-grid">
+        <div class="service-card"><div class="service-icon"><i class="fas fa-water"></i></div><h3>Водоснабжение</h3><p>Скважины, насосные станции, фильтрация, разводка труб, гидроаккумуляторы — автономная вода без перебоев.</p><ul class="service-features"><li><i class="fas fa-check-circle"></i> Скважины под ключ</li><li><i class="fas fa-check-circle"></i> Системы очистки</li><li><i class="fas fa-check-circle"></i> Насосное оборудование</li></ul></div>
+        <div class="service-card"><div class="service-icon"><i class="fas fa-temperature-high"></i></div><h3>Отопление</h3><p>Коттеджи, дачи, бани — от проектирования котельной до установки радиаторов и теплых полов.</p><ul class="service-features"><li><i class="fas fa-check-circle"></i> Газовые / электрические котлы</li><li><i class="fas fa-check-circle"></i> Теплые полы водяные</li><li><i class="fas fa-check-circle"></i> Обвязка котельных</li></ul></div>
+        <div class="service-card"><div class="service-icon"><i class="fas fa-fire-extinguisher"></i></div><h3>Пожарная безопасность</h3><p>Монтаж систем АПС, дымоудаления, оповещения и пожаротушения для защиты дома и людей.</p><ul class="service-features"><li><i class="fas fa-check-circle"></i> Автоматическая пожарная сигнализация</li><li><i class="fas fa-check-circle"></i> Системы оповещения</li><li><i class="fas fa-check-circle"></i> Модульное пожаротушение</li></ul></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="calculator" class="calculator-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag"><i class="fas fa-calculator"></i> Калькулятор стоимости</span>
+        <h2 class="section-title">Рассчитайте <span class="accent">примерную стоимость</span> работ</h2>
+        <p class="section-desc">Заполните параметры вашего объекта — получите ориентировочную цену монтажа инженерных систем</p>
+      </div>
+      <div class="calculator-wrapper">
+        <div class="calculator-form">
+          <div class="calc-group"><label><i class="fas fa-cogs"></i> Тип системы</label><select id="calcSystem" class="calc-input"><option value="water">Водоснабжение</option><option value="heating">Отопление</option><option value="fire">Пожарная безопасность</option><option value="complex">Комплексный монтаж (всё включено)</option></select></div>
+          <div class="calc-group"><label><i class="fas fa-expand"></i> Площадь объекта (м²)</label><input type="range" id="calcArea" min="50" max="500" step="10" value="150"><div class="range-values"><span>50 м²</span><span id="areaValue">150 м²</span><span>500+ м²</span></div></div>
+          <div class="calc-group"><label><i class="fas fa-hashtag"></i> Количество точек / радиаторов</label><select id="calcPoints" class="calc-input"><option value="1">1-3 точки</option><option value="2">4-6 точек</option><option value="3" selected>7-10 точек</option><option value="4">11-15 точек</option><option value="5">16+ точек</option></select></div>
+          <div class="calc-group"><label><i class="fas fa-chart-line"></i> Сложность монтажа</label><select id="calcComplexity" class="calc-input"><option value="standard">Стандартный (типовой дом)</option><option value="medium">Повышенной сложности (нестандартная планировка)</option><option value="premium">Премиум (сложный проект, дизайн-решения)</option></select></div>
+          <div class="calc-group"><label><i class="fas fa-plus-circle"></i> Дополнительные услуги</label><div class="checkbox-group"><label class="checkbox-label"><input type="checkbox" id="calcVisit"> Выезд специалиста на объект</label><label class="checkbox-label"><input type="checkbox" id="calcProject"> Проектирование инженерных систем</label><label class="checkbox-label"><input type="checkbox" id="calcUrgent"> Срочный монтаж (до 7 дней)</label></div></div>
+        </div>
+        <div class="calculator-result">
+          <div class="result-card"><h3>Примерная стоимость</h3><div class="result-price"><span id="calcPrice">0</span><span class="price-currency">₽</span></div><p class="result-note">* Окончательная стоимость уточняется после выезда специалиста. Расчет включает материалы и работу.</p><button class="btn btn-primary result-btn" id="calcRequestBtn"><i class="fas fa-paper-plane"></i> Оплатить по расчёту</button></div>
+          <div class="result-breakdown"><h4><i class="fas fa-chart-pie"></i> Детализация</h4><ul id="calcBreakdown"><li>Базовая стоимость: <span>—</span></li><li>Коэффициент площади: <span>—</span></li><li>Количество точек: <span>—</span></li><li>Сложность: <span>—</span></li><li>Доп. услуги: <span>—</span></li></ul></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="portfolio" class="portfolio">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Наши работы</span>
+        <h2 class="section-title">Реализованные <span class="accent">объекты</span></h2>
+        <p class="section-desc">Современные коттеджи и загородные дома, где смонтированы инженерные системы под ключ.</p>
+      </div>
+      <div class="portfolio-grid">
+        <div class="portfolio-item"><div class="portfolio-img"><i class="fas fa-hard-hat"></i></div><div class="portfolio-info"><h4>Коттедж «Скандинавия»</h4><p>Водоснабжение + отопление + пожарная сигнализация</p></div></div>
+        <div class="portfolio-item"><div class="portfolio-img"><i class="fas fa-ruler-combined"></i></div><div class="portfolio-info"><h4>Таунхаус «Академ-парк»</h4><p>Котельная, теплые полы, система очистки воды</p></div></div>
+        <div class="portfolio-item"><div class="portfolio-img"><i class="fas fa-home"></i></div><div class="portfolio-info"><h4>Загородный дом «Лесной»</h4><p>АПС, дымоудаление, автономное отопление</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="stages" class="stages">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Как мы работаем</span>
+        <h2 class="section-title">4 этапа <span class="accent">к идеальной инженерии</span></h2>
+      </div>
+      <div class="stages-timeline">
+        <div class="stage"><div class="stage-number">01</div><div class="stage-content"><h3>Выезд на объект</h3><p>Осмотр, замеры, обсуждение пожеланий. Составляем техническое задание.</p></div></div>
+        <div class="stage"><div class="stage-number">02</div><div class="stage-content"><h3>Составление сметы</h3><p>Прозрачный расчет материалов и работ. Фиксируем стоимость без скрытых платежей.</p></div></div>
+        <div class="stage"><div class="stage-number">03</div><div class="stage-content"><h3>Монтаж и интеграция</h3><p>Чистый, аккуратный монтаж по утвержденному проекту. Соблюдение сроков.</p></div></div>
+        <div class="stage"><div class="stage-number">04</div><div class="stage-content"><h3>Сдача и гарантия</h3><p>Тестирование, настройка, подписание акта. Гарантийное обслуживание 24 мес.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="reviews" class="reviews">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Отзывы</span>
+        <h2 class="section-title">Что говорят <span class="accent">наши клиенты</span></h2>
+      </div>
+      <div class="reviews-slider">
+        <div class="review-card"><div class="review-text"><i class="fas fa-quote-left"></i><p>Сделали водоснабжение и отопление в коттедже под ключ. Работают быстро, чисто, всегда на связи. Система работает идеально уже второй год. Рекомендую!</p></div><div class="review-author"><strong>Алексей С.</strong><span>Коттедж «Лесной», Томск</span></div></div>
+        <div class="review-card"><div class="review-text"><i class="fas fa-quote-left"></i><p>Проектировали пожарную безопасность для таунхауса. Все согласовали, смонтировали датчики и систему оповещения. Специалисты грамотные, спасибо!</p></div><div class="review-author"><strong>Екатерина М.</strong><span>ЖК «Академ-парк»</span></div></div>
+        <div class="review-card"><div class="review-text"><i class="fas fa-quote-left"></i><p>Отличный подход к деталям: смонтировали котельную, теплый пол. Никаких нареканий, даже мебель не испачкали. Буду рекомендовать друзьям.</p></div><div class="review-author"><strong>Дмитрий В.</strong><span>ИЖС «Заозерный»</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact">
+    <div class="container">
+      <div class="contact-wrapper">
+        <div class="contact-info">
+          <span class="section-tag">Свяжитесь с нами</span>
+          <h2>Запишитесь на <span class="accent">просмотр объекта</span></h2>
+          <p>Оставьте заявку — мы подберем удобное время для выезда и осмотра будущей инженерии вашего дома.</p>
+          <div class="contact-details">
+            <div class="detail-item"><i class="fas fa-phone-alt"></i><div><strong>Телефон</strong><a href="tel:+79095406644">8 909 540 66 44</a></div></div>
+            <div class="detail-item"><i class="fas fa-map-marker-alt"></i><div><strong>Регион работы</strong><span>Томск и Томская область</span></div></div>
+            <div class="detail-item messengers"><i class="fas fa-comment-dots"></i><div><strong>Мессенджеры</strong><div class="messenger-links"><a href="https://wa.me/79095406644" target="_blank" class="msg-link"><i class="fab fa-whatsapp"></i> WhatsApp</a><a href="https://t.me/+79095406644" target="_blank" class="msg-link"><i class="fab fa-telegram"></i> Telegram</a></div></div></div>
+          </div>
+        </div>
+        <div class="contact-form">
+          <form id="requestForm">
+            <div class="form-group"><input type="text" id="name" name="name" placeholder="Ваше имя" required></div>
+            <div class="form-group"><input type="tel" id="phone" name="phone" placeholder="Номер телефона" required></div>
+            <div class="form-group"><input type="text" id="objectAddress" name="address" placeholder="Адрес объекта (район / улица)"></div>
+            <div class="form-group"><select id="serviceInterest" name="service"><option value="" disabled selected>Интересующая услуга</option><option>Водоснабжение</option><option>Отопление</option><option>Пожарная безопасность</option><option>Комплексный монтаж</option></select></div>
+            <div class="form-group"><textarea rows="3" id="message" name="message" placeholder="Удобное время для просмотра объекта или комментарий"></textarea></div>
+            <div class="form-group">
+              <label class="checkbox-label" style="display: flex; align-items: flex-start; gap: 10px;">
+                <input type="checkbox" id="consentCheck" required style="width: 18px; height: 18px; margin-top: 2px;">
+                <span style="font-size: 0.8rem; color: var(--text-muted);">
+                  Я ознакомлен(а) и согласен(на) с 
+                  <a href="docs/personal-data-processing.html" target="_blank" style="color: var(--primary);">согласием на обработку персональных данных</a>, 
+                  <a href="docs/privacy-policy.html" target="_blank" style="color: var(--primary);">политикой конфиденциальности</a> 
+                  и <a href="docs/user-agreement.html" target="_blank" style="color: var(--primary);">пользовательским соглашением</a>
+                </span>
+              </label>
+            </div>
+            <button type="submit" class="btn btn-primary full-width"><i class="fas fa-paper-plane"></i> Отправить заявку</button>
+            <p class="form-note">Нажимая на кнопку, вы соглашаетесь с обработкой данных. Мы свяжемся с вами в течение 30 минут.</p>
+          </form>
+          <div id="formStatus" class="form-status"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand"><i class="fas fa-microchip"></i><span>Инженерные системы</span><p>Современный монтаж инженерных коммуникаций для коттеджей в Томске. 23+ года опыта.</p></div>
+        <div class="footer-links">
+          <h4>Навигация</h4>
+          <a href="#home">Главная</a>
+          <a href="#services">Услуги</a>
+          <a href="#calculator">Калькулятор</a>
+          <a href="#portfolio">Объекты</a>
+          <a href="#contact">Контакты</a>
+        </div>
+        <div class="footer-links">
+          <h4>Документы</h4>
+          <a href="docs/privacy-policy.html" target="_blank">Политика конфиденциальности</a>
+          <a href="docs/user-agreement.html" target="_blank">Пользовательское соглашение</a>
+          <a href="docs/client-agreement.html" target="_blank">Клиентское соглашение (оферта)</a>
+          <a href="docs/personal-data-processing.html" target="_blank">Согласие на обработку ПД</a>
+        </div>
+        <div class="footer-contacts"><h4>Контакты</h4><a href="tel:+79095406644"><i class="fas fa-phone"></i> 8 909 540 66 44</a><div class="footer-messengers"><a href="https://wa.me/79095406644" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a><a href="https://t.me/+79095406644" target="_blank"><i class="fab fa-telegram"></i> Telegram</a></div><p><i class="fas fa-map-pin"></i> Томск и область</p></div>
+      </div>
+      <div class="footer-bottom"><p>© 2025 Инженерные системы. Все права защищены.</p></div>
+    </div>
+  </footer>
+
+  <div id="requestModal" class="modal">
+    <div class="modal-content">
+      <span class="modal-close">&times;</span>
+      <h3>Запись на просмотр объекта</h3>
+      <p>Оставьте контакты, и мы согласуем выезд специалиста для осмотра и консультации.</p>
+      <form id="modalForm">
+        <input type="text" placeholder="Ваше имя" id="modalName" required>
+        <input type="tel" placeholder="Телефон" id="modalPhone" required>
+        <textarea rows="2" placeholder="Адрес или желаемая дата"></textarea>
+        <div class="form-group">
+          <label class="checkbox-label" style="display: flex; align-items: flex-start; gap: 10px; margin-top: 10px;">
+            <input type="checkbox" id="modalConsentCheck" required style="width: 18px; height: 18px; margin-top: 2px;">
+            <span style="font-size: 0.8rem; color: var(--text-muted);">
+              Я ознакомлен(а) и согласен(на) с 
+              <a href="docs/personal-data-processing.html" target="_blank" style="color: var(--primary);">согласием на обработку персональных данных</a>, 
+              <a href="docs/privacy-policy.html" target="_blank" style="color: var(--primary);">политикой конфиденциальности</a> 
+              и <a href="docs/user-agreement.html" target="_blank" style="color: var(--primary);">пользовательским соглашением</a>
+            </span>
+          </label>
+        </div>
+        <button type="submit" class="btn btn-primary">Отправить заявку</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-client.js"></script>
+  <script>
+    // ========== ФУНКЦИЯ ДЛЯ ПОКАЗА УВЕДОМЛЕНИЙ ==========
+    function showToast(message, type = 'success') {
+      let container = document.getElementById('toastContainer');
+      if (!container) {
+        container = document.createElement('div');
+        container.className = 'toast-container';
+        container.id = 'toastContainer';
+        document.body.appendChild(container);
+      }
+      
+      const toast = document.createElement('div');
+      toast.className = `toast toast-${type}`;
+      
+      let icon = '';
+      let title = '';
+      
+      switch(type) {
+        case 'success':
+          icon = '<i class="fas fa-check-circle"></i>';
+          title = 'Успешно!';
+          break;
+        case 'error':
+          icon = '<i class="fas fa-exclamation-circle"></i>';
+          title = 'Ошибка!';
+          break;
+        case 'warning':
+          icon = '<i class="fas fa-exclamation-triangle"></i>';
+          title = 'Внимание!';
+          break;
+        default:
+          icon = '<i class="fas fa-info-circle"></i>';
+          title = 'Информация';
+      }
+      
+      toast.innerHTML = `
+        <div class="toast-icon">${icon}</div>
+        <div class="toast-content">
+          <div class="toast-title">${title}</div>
+          <div class="toast-message">${message}</div>
+        </div>
+        <button class="toast-close"><i class="fas fa-times"></i></button>
+      `;
+      
+      container.appendChild(toast);
+      
+      const closeBtn = toast.querySelector('.toast-close');
+      closeBtn.addEventListener('click', () => {
+        toast.classList.add('toast-hide');
+        setTimeout(() => toast.remove(), 300);
+      });
+      
+      setTimeout(() => {
+        if (toast.parentNode) {
+          toast.classList.add('toast-hide');
+          setTimeout(() => toast.remove(), 300);
+        }
+      }, 5000);
+    }
+    
+    // ========== ОТПРАВКА В TELEGRAM ==========
+    const TELEGRAM_BOT_TOKEN = '8686809545:AAE15NDVgh1PQzyrtWiQe4smbgs6BAVJ624';
+    const TELEGRAM_CHAT_ID = '2068108259';
+    
+    async function sendToTelegram(message) {
+      const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+      const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+      
+      const data = {
+        chat_id: TELEGRAM_CHAT_ID,
+        text: message,
+        parse_mode: 'HTML'
+      };
+      
+      try {
+        let response = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        
+        if (!response.ok) {
+          response = await fetch(proxyUrl + url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+        }
+        
+        const result = await response.json();
+        return result.ok === true;
+      } catch (error) {
+        console.error('Ошибка Telegram:', error);
+        return false;
+      }
+    }
+    
+    async function sendFormData(formElement, source = 'Форма на сайте') {
+      const formData = new FormData(formElement);
+      const data = {};
+      for (let [key, value] of formData.entries()) {
+        data[key] = value;
+      }
+      
+      let message = `🔔 <b>НОВАЯ ЗАЯВКА!</b>\n\n`;
+      message += `📱 <b>Источник:</b> ${source}\n`;
+      message += `👤 <b>Имя:</b> ${data.name || '—'}\n`;
+      message += `📞 <b>Телефон:</b> ${data.phone || '—'}\n`;
+      if (data.address && data.address !== '') message += `📍 <b>Адрес:</b> ${data.address}\n`;
+      if (data.service && data.service !== '') message += `🔧 <b>Услуга:</b> ${data.service}\n`;
+      if (data.message && data.message !== '') message += `💬 <b>Сообщение:</b> ${data.message}\n`;
+      message += `⏰ <b>Время:</b> ${new Date().toLocaleString('ru-RU')}\n`;
+      message += `🌐 <b>Устройство:</b> ${navigator.userAgent.substring(0, 80)}`;
+      
+      return await sendToTelegram(message);
+    }
+    
+    // ========== ОСНОВНОЙ КОД ==========
+    document.addEventListener('DOMContentLoaded', () => {
+      // Мобильное меню
+      const menuToggle = document.getElementById('menuToggle');
+      const navLinks = document.getElementById('navLinks');
+      if (menuToggle && navLinks) {
+        menuToggle.addEventListener('click', () => {
+          navLinks.classList.toggle('active');
+        });
+      }
+      
+      // Плавная прокрутка
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          const targetId = this.getAttribute('href');
+          if (targetId === '#') return;
+          const target = document.querySelector(targetId);
+          if (target) {
+            e.preventDefault();
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            if (navLinks?.classList.contains('active')) navLinks.classList.remove('active');
+          }
+        });
+      });
+      
+      // Проверка авторизации для отображения аватарки
+      async function updateAuthUI() {
+        if (typeof window.supabaseCheckAuth === 'function') {
+          const session = await window.supabaseCheckAuth();
+          const loginLink = document.getElementById('loginLink');
+          const avatarWrapper = document.getElementById('avatarWrapper');
+          
+          if (session) {
+            if (loginLink) loginLink.style.display = 'none';
+            if (avatarWrapper) avatarWrapper.style.display = 'block';
+            
+            const user = await window.supabaseGetCurrentUser();
+            const profile = await window.supabaseGetUserProfile(user?.id);
+            const name = profile?.full_name || user?.email || '';
+            const initials = name.charAt(0).toUpperCase();
+            const avatarBtn = document.getElementById('avatarBtn');
+            if (avatarBtn) {
+              avatarBtn.innerHTML = `<span class="avatar-initials">${initials}</span>`;
+            }
+          } else {
+            if (loginLink) loginLink.style.display = 'flex';
+            if (avatarWrapper) avatarWrapper.style.display = 'none';
+          }
+        }
+      }
+      updateAuthUI();
+      
+      // Выпадающее меню
+      const avatarBtn = document.getElementById('avatarBtn');
+      const dropdownMenu = document.getElementById('dropdownMenu');
+      if (avatarBtn && dropdownMenu) {
+        avatarBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          dropdownMenu.classList.toggle('show');
+        });
+        
+        document.addEventListener('click', () => {
+          dropdownMenu.classList.remove('show');
+        });
+        
+        dropdownMenu.addEventListener('click', (e) => {
+          e.stopPropagation();
+        });
+      }
+      
+      // Выход
+      const logoutBtn = document.getElementById('logoutBtn');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', async () => {
+          if (typeof window.supabaseLogout === 'function') {
+            await window.supabaseLogout();
+          }
+          location.reload();
+        });
+      }
+      
+      // Кнопка "На главную" в меню
+      const goToMain = document.getElementById('goToMain');
+      if (goToMain) {
+        goToMain.addEventListener('click', () => {
+          window.location.href = './';
+        });
+      }
+      
+      // ========== КАЛЬКУЛЯТОР ==========
+      const systemSelect = document.getElementById('calcSystem');
+      const areaSlider = document.getElementById('calcArea');
+      const areaValue = document.getElementById('areaValue');
+      const pointsSelect = document.getElementById('calcPoints');
+      const complexitySelect = document.getElementById('calcComplexity');
+      const visitCheck = document.getElementById('calcVisit');
+      const projectCheck = document.getElementById('calcProject');
+      const urgentCheck = document.getElementById('calcUrgent');
+      const priceSpan = document.getElementById('calcPrice');
+      const breakdownList = document.getElementById('calcBreakdown');
+      
+      const basePrices = { water: 85000, heating: 120000, fire: 95000, complex: 280000 };
+      const getAreaCoeff = (area) => {
+        if (area <= 100) return 1.0;
+        if (area <= 150) return 1.15;
+        if (area <= 200) return 1.3;
+        if (area <= 300) return 1.5;
+        return 1.8;
+      };
+      const pointsCoeff = { '1': 0.8, '2': 1.0, '3': 1.2, '4': 1.4, '5': 1.7 };
+      const complexityCoeff = { standard: 1.0, medium: 1.35, premium: 1.8 };
+      const extraPrices = { visit: 5000, project: 15000, urgent: 25000 };
+      
+      function updateCalculator() {
+        const system = systemSelect?.value || 'water';
+        const area = parseInt(areaSlider?.value || 150);
+        const pointsKey = pointsSelect?.value || '3';
+        const complexity = complexitySelect?.value || 'standard';
+        
+        const basePrice = basePrices[system] || 85000;
+        const areaCoeff = getAreaCoeff(area);
+        const pointsCoeffVal = pointsCoeff[pointsKey] || 1.0;
+        const complexityCoeffVal = complexityCoeff[complexity] || 1.0;
+        
+        let extraTotal = 0;
+        if (visitCheck?.checked) extraTotal += extraPrices.visit;
+        if (projectCheck?.checked) extraTotal += extraPrices.project;
+        if (urgentCheck?.checked) extraTotal += extraPrices.urgent;
+        
+        let total = basePrice * areaCoeff * pointsCoeffVal * complexityCoeffVal + extraTotal;
+        total = Math.round(total / 1000) * 1000;
+        
+        if (priceSpan) priceSpan.textContent = total.toLocaleString('ru-RU');
+        
+        if (breakdownList) {
+          const systemNames = { water: 'Водоснабжение', heating: 'Отопление', fire: 'Пожарная безопасность', complex: 'Комплексный монтаж' };
+          const pointsText = pointsSelect?.options[pointsSelect.selectedIndex]?.text || '—';
+          const complexityText = complexitySelect?.options[complexitySelect.selectedIndex]?.text || '—';
+          
+          let extrasText = [];
+          if (visitCheck?.checked) extrasText.push('Выезд специалиста');
+          if (projectCheck?.checked) extrasText.push('Проектирование');
+          if (urgentCheck?.checked) extrasText.push('Срочный монтаж');
+          const extrasDisplay = extrasText.length ? extrasText.join(', ') : '—';
+          
+          breakdownList.innerHTML = `
+            <li>Тип системы: <span>${systemNames[system]}</span></li>
+            <li>Площадь (${area} м²): <span>×${areaCoeff}</span></li>
+            <li>Количество точек: <span>${pointsText} (×${pointsCoeffVal})</span></li>
+            <li>Сложность: <span>${complexityText} (×${complexityCoeffVal})</span></li>
+            <li>Доп. услуги: <span>${extrasDisplay}</span></li>
+          `;
+        }
+      }
+      
+      if (areaSlider && areaValue) {
+        areaSlider.addEventListener('input', () => {
+          areaValue.textContent = `${areaSlider.value} м²`;
+          updateCalculator();
+        });
+      }
+      
+      if (systemSelect) systemSelect.addEventListener('change', updateCalculator);
+      if (pointsSelect) pointsSelect.addEventListener('change', updateCalculator);
+      if (complexitySelect) complexitySelect.addEventListener('change', updateCalculator);
+      if (visitCheck) visitCheck.addEventListener('change', updateCalculator);
+      if (projectCheck) projectCheck.addEventListener('change', updateCalculator);
+      if (urgentCheck) urgentCheck.addEventListener('change', updateCalculator);
+      
+      updateCalculator();
+      
+      // Кнопка калькулятора - ведёт на страницу оформления заказа
+      const calcRequestBtn = document.getElementById('calcRequestBtn');
+      if (calcRequestBtn) {
+        calcRequestBtn.addEventListener('click', () => {
+          const system = systemSelect?.value || 'water';
+          const area = areaSlider?.value || '150';
+          const points = pointsSelect?.value || '3';
+          const complexity = complexitySelect?.value || 'standard';
+          const hasVisit = visitCheck?.checked || false;
+          const hasProject = projectCheck?.checked || false;
+          const hasUrgent = urgentCheck?.checked || false;
+          const totalPrice = priceSpan?.innerText.replace(/\s/g, '') || '0';
+          
+          const params = new URLSearchParams({
+            service: system,
+            area: area,
+            points: points,
+            complexity: complexity,
+            visit: hasVisit,
+            project: hasProject,
+            urgent: hasUrgent,
+            total: totalPrice
+          });
+          
+          window.location.href = `checkout.html?${params.toString()}`;
+        });
+      }
+      
+      // Модальное окно
+      const modal = document.getElementById('requestModal');
+      const openModalBtn = document.getElementById('openRequestModal');
+      const closeModalSpan = document.querySelector('.modal-close');
+      
+      if (openModalBtn && modal) {
+        openModalBtn.addEventListener('click', () => {
+          modal.style.display = 'flex';
+        });
+      }
+      if (closeModalSpan && modal) {
+        closeModalSpan.addEventListener('click', () => {
+          modal.style.display = 'none';
+        });
+      }
+      window.addEventListener('click', (e) => {
+        if (e.target === modal) modal.style.display = 'none';
+      });
+      
+      // Отправка основной формы
+      const contactForm = document.getElementById('requestForm');
+      
+      if (contactForm) {
+        contactForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          
+          const consentCheck = document.getElementById('consentCheck');
+          if (consentCheck && !consentCheck.checked) {
+            showToast('Пожалуйста, подтвердите согласие на обработку персональных данных', 'warning');
+            return;
+          }
+          
+          showToast('Отправка заявки...', 'info');
+          
+          const success = await sendFormData(contactForm, 'Форма на сайте');
+          
+          if (success) {
+            showToast('✅ Заявка успешно отправлена! Мы свяжемся с вами в ближайшее время.', 'success');
+            contactForm.reset();
+            if (consentCheck) consentCheck.checked = false;
+          } else {
+            showToast('❌ Ошибка отправки. Пожалуйста, позвоните по телефону: 8 909 540 66 44', 'error');
+          }
+        });
+      }
+      
+      // Отправка модальной формы
+      const modalForm = document.getElementById('modalForm');
+      if (modalForm) {
+        modalForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          
+          const modalConsentCheck = document.getElementById('modalConsentCheck');
+          if (modalConsentCheck && !modalConsentCheck.checked) {
+            showToast('Пожалуйста, подтвердите согласие на обработку персональных данных', 'warning');
+            return;
+          }
+          
+          showToast('Отправка заявки...', 'info');
+          
+          const modalData = {
+            name: document.getElementById('modalName')?.value || '',
+            phone: document.getElementById('modalPhone')?.value || '',
+            address: '',
+            service: '',
+            message: modalForm.querySelector('textarea')?.value || ''
+          };
+          
+          const tempForm = document.createElement('form');
+          tempForm.innerHTML = `
+            <input name="name" value="${modalData.name.replace(/"/g, '&quot;')}">
+            <input name="phone" value="${modalData.phone.replace(/"/g, '&quot;')}">
+            <input name="address" value="${modalData.address}">
+            <input name="service" value="${modalData.service}">
+            <input name="message" value="${modalData.message.replace(/"/g, '&quot;')}">
+          `;
+          
+          const success = await sendFormData(tempForm, 'Модальное окно');
+          
+          if (success) {
+            showToast('✅ Заявка принята! Мы перезвоним для подтверждения.', 'success');
+            modalForm.reset();
+            if (modalConsentCheck) modalConsentCheck.checked = false;
+            if (modal) modal.style.display = 'none';
+          } else {
+            showToast('❌ Ошибка отправки. Пожалуйста, позвоните по телефону: 8 909 540 66 44', 'error');
+          }
+        });
+      }
+      
+      // Анимации
+      const animateOnScroll = () => {
+        const elements = document.querySelectorAll('[data-aos]');
+        elements.forEach(el => {
+          const rect = el.getBoundingClientRect();
+          if (rect.top < window.innerHeight - 100) {
+            el.style.opacity = '1';
+            el.style.transform = 'translateY(0)';
+          } else {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+          }
+        });
+      };
+      
+      const styleAnim = document.createElement('style');
+      styleAnim.textContent = `[data-aos] { transition: all 0.6s ease; opacity: 0; transform: translateY(20px); }`;
+      document.head.appendChild(styleAnim);
+      window.addEventListener('scroll', animateOnScroll);
+      animateOnScroll();
+    });
+  </script>
+</body>
+</html>

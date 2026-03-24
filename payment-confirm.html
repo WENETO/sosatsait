@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Оплата заказа | Инженерные системы Томск</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-client.js"></script>
+  <style>
+    .payment-container {
+      max-width: 600px;
+      margin: 60px auto;
+      padding: 40px;
+      background: var(--bg-card);
+      border-radius: 32px;
+      border: 1px solid rgba(0, 194, 255, 0.3);
+      text-align: center;
+    }
+    .payment-container h2 {
+      color: var(--primary);
+      margin-bottom: 24px;
+    }
+    .payment-details {
+      background: rgba(0, 194, 255, 0.1);
+      border-radius: 24px;
+      padding: 24px;
+      margin: 24px 0;
+    }
+    .payment-amount {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+    .payment-methods {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      margin: 32px 0;
+      flex-wrap: wrap;
+    }
+    .payment-method {
+      background: #0a0d16;
+      border: 1px solid #2a2f3c;
+      border-radius: 16px;
+      padding: 16px 24px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .payment-method:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+    .payment-method.active {
+      border-color: var(--primary);
+      background: rgba(0, 194, 255, 0.1);
+    }
+    .payment-method i {
+      font-size: 2rem;
+      color: var(--primary);
+    }
+    .back-link {
+      color: var(--primary);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 24px;
+    }
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--primary);
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .test-cards {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 16px;
+      padding: 16px;
+      margin-top: 24px;
+      font-size: 0.8rem;
+      text-align: left;
+    }
+    .test-cards ul {
+      margin: 8px 0 0 20px;
+      color: var(--text-muted);
+    }
+    .test-cards li {
+      margin: 4px 0;
+    }
+    .toast-container {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .toast {
+      min-width: 280px;
+      max-width: 380px;
+      background: rgba(12, 15, 23, 0.95);
+      backdrop-filter: blur(12px);
+      border-radius: 16px;
+      padding: 16px 20px;
+      border-left: 4px solid var(--primary);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transform: translateX(400px);
+      opacity: 0;
+      animation: toastSlideIn 0.3s ease forwards;
+    }
+    .toast-success { border-left-color: #00ffaa; }
+    .toast-error { border-left-color: #ff5555; }
+    .toast-warning { border-left-color: #ffaa00; }
+    .toast-info { border-left-color: var(--primary); }
+    .toast-icon i { font-size: 1.2rem; }
+    .toast-success .toast-icon i { color: #00ffaa; }
+    .toast-error .toast-icon i { color: #ff5555; }
+    .toast-warning .toast-icon i { color: #ffaa00; }
+    .toast-info .toast-icon i { color: var(--primary); }
+    .toast-content { flex: 1; }
+    .toast-message { font-size: 0.85rem; color: var(--text-muted); }
+    .toast-close { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1rem; padding: 4px; }
+    @keyframes toastSlideIn {
+      0% { transform: translateX(400px); opacity: 0; }
+      100% { transform: translateX(0); opacity: 1; }
+    }
+    .toast-hide { animation: toastSlideOut 0.3s ease forwards; }
+    @keyframes toastSlideOut {
+      0% { transform: translateX(0); opacity: 1; }
+      100% { transform: translateX(400px); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="./" class="logo">
+        <i class="fas fa-microchip"></i>
+        <span>Инженерные системы</span>
+      </a>
+    </div>
+  </nav>
+
+  <div class="payment-container" id="paymentContainer">
+    <h2><i class="fas fa-credit-card"></i> Оплата заказа</h2>
+    <div id="paymentInfo" class="payment-details">
+      <div class="loading"></div> Загрузка информации о договоре...
+    </div>
+
+    <div class="payment-methods" id="paymentMethods" style="display: none;">
+      <div class="payment-method" data-method="card" id="cardMethod">
+        <i class="fas fa-credit-card"></i>
+        <div>Банковская карта</div>
+      </div>
+      <div class="payment-method" data-method="sbp" id="sbpMethod">
+        <i class="fas fa-mobile-alt"></i>
+        <div>СБП</div>
+      </div>
+    </div>
+
+    <div id="paymentWidget" class="yookassa-widget"></div>
+
+    <div class="test-cards" id="testCards" style="display: none;">
+      <i class="fas fa-info-circle"></i> Тестовые карты:
+      <ul>
+        <li><strong>5555 5555 5555 4477</strong> — успешная оплата</li>
+        <li><strong>5555 5555 5555 4444</strong> — оплата с 3D-Secure</li>
+      </ul>
+    </div>
+
+    <a href="cabinet/dashboard.html" class="back-link">
+      <i class="fas fa-arrow-left"></i> Вернуться в личный кабинет
+    </a>
+  </div>
+
+  <script>
+    const SUPABASE_URL = 'https://dtuipgbsupodwvxlwmse.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0dWlwZ2JzdXBvZHd2eGx3bXNlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzMzUxNzIsImV4cCI6MjA4OTkxMTE3Mn0.ABaA7-D4jU_64bFGQQZc3J4-0TUH5Lz8PjhqobK8ZvI';
+    const TELEGRAM_BOT_TOKEN = '8686809545:AAE15NDVgh1PQzyrtWiQe4smbgs6BAVJ624';
+    const TELEGRAM_CHAT_ID = '2068108259';
+    
+    let currentContract = null;
+    let userProfile = null;
+    
+    function showToast(message, type = 'success') {
+      let container = document.getElementById('toastContainer');
+      if (!container) {
+        container = document.createElement('div');
+        container.className = 'toast-container';
+        container.id = 'toastContainer';
+        document.body.appendChild(container);
+      }
+      
+      const toast = document.createElement('div');
+      toast.className = `toast toast-${type}`;
+      toast.innerHTML = `
+        <div class="toast-icon"><i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'warning' ? 'fa-exclamation-triangle' : 'fa-exclamation-circle'}"></i></div>
+        <div class="toast-content"><div class="toast-message">${message}</div></div>
+        <button class="toast-close"><i class="fas fa-times"></i></button>
+      `;
+      container.appendChild(toast);
+      
+      const closeBtn = toast.querySelector('.toast-close');
+      closeBtn.addEventListener('click', () => {
+        toast.classList.add('toast-hide');
+        setTimeout(() => toast.remove(), 300);
+      });
+      
+      setTimeout(() => {
+        if (toast.parentNode) {
+          toast.classList.add('toast-hide');
+          setTimeout(() => toast.remove(), 300);
+        }
+      }, 5000);
+    }
+    
+    async function sendToTelegram(message) {
+      const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+      const data = {
+        chat_id: TELEGRAM_CHAT_ID,
+        text: message,
+        parse_mode: 'HTML'
+      };
+      
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        const result = await response.json();
+        return result.ok === true;
+      } catch (error) {
+        console.error('Ошибка Telegram:', error);
+        return false;
+      }
+    }
+    
+    async function generatePDF(contractId) {
+      try {
+        const response = await fetch(`api/generate-pdf.php?contract_id=${contractId}`);
+        const result = await response.json();
+        return result.success ? result.pdf_url : null;
+      } catch (error) {
+        console.error('Ошибка генерации PDF:', error);
+        return null;
+      }
+    }
+    
+    async function sendPaymentNotification(contract, profile, amount) {
+      const message = `💰 <b>НОВАЯ ОПЛАТА!</b>\n\n` +
+        `📄 <b>Договор:</b> ${contract.contract_number}\n` +
+        `👤 <b>Клиент:</b> ${profile.full_name || 'Не указано'}\n` +
+        `📞 <b>Телефон:</b> ${profile.phone || 'Не указан'}\n` +
+        `📧 <b>Email:</b> ${profile.email || 'Не указан'}\n` +
+        `📍 <b>Объект:</b> ${contract.object_address || 'Не указан'}\n` +
+        `🔧 <b>Услуга:</b> ${contract.services || 'Монтаж инженерных систем'}\n` +
+        `💵 <b>Сумма:</b> ${amount.toLocaleString()} ₽\n` +
+        `⏰ <b>Дата оплаты:</b> ${new Date().toLocaleString('ru-RU')}`;
+      
+      return await sendToTelegram(message);
+    }
+    
+    async function loadContract(contractId) {
+      try {
+        const url = `${SUPABASE_URL}/rest/v1/contracts?id=eq.${contractId}`;
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: {
+            'apikey': SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+          }
+        });
+        
+        if (!response.ok) throw new Error('Договор не найден');
+        
+        const contracts = await response.json();
+        if (!contracts || contracts.length === 0) throw new Error('Договор не найден');
+        
+        currentContract = contracts[0];
+        
+        const profileResponse = await fetch(`${SUPABASE_URL}/rest/v1/profiles?id=eq.${currentContract.user_id}`, {
+          method: 'GET',
+          headers: {
+            'apikey': SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+          }
+        });
+        const profiles = await profileResponse.json();
+        userProfile = profiles[0] || {};
+        
+        const userResponse = await fetch(`${SUPABASE_URL}/rest/v1/auth/users?id=eq.${currentContract.user_id}`, {
+          method: 'GET',
+          headers: {
+            'apikey': SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+          }
+        });
+        const users = await userResponse.json();
+        userProfile.email = users[0]?.email || 'Не указан';
+        
+        const paymentInfo = document.getElementById('paymentInfo');
+        paymentInfo.innerHTML = `
+          <p>Номер договора: <strong>${currentContract.contract_number || '—'}</strong></p>
+          <p>Услуга: <strong>${currentContract.services || 'Монтаж инженерных систем'}</strong></p>
+          <p>Сумма к оплате:</p>
+          <div class="payment-amount">${(currentContract.total_amount || 0).toLocaleString()} ₽</div>
+        `;
+        
+        document.getElementById('paymentMethods').style.display = 'flex';
+        document.getElementById('testCards').style.display = 'block';
+        
+        return true;
+      } catch (error) {
+        console.error('Ошибка загрузки договора:', error);
+        document.getElementById('paymentInfo').innerHTML = `
+          <p style="color: #ff5555;">❌ Не удалось загрузить информацию о договоре</p>
+          <p style="font-size: 0.8rem;">Ошибка: ${error.message}</p>
+          <button onclick="window.location.href='cabinet/dashboard.html'" class="btn btn-primary" style="margin-top: 16px;">Вернуться в кабинет</button>
+        `;
+        return false;
+      }
+    }
+    
+    async function createPayment() {
+      const widgetContainer = document.getElementById('paymentWidget');
+      widgetContainer.innerHTML = '<div class="loading"></div> Создание платежа...';
+      
+      try {
+        // Сохраняем ID договора в localStorage перед переходом на оплату
+        localStorage.setItem('last_paid_contract', currentContract.id);
+        
+        const response = await fetch('api/create-payment.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            amount: currentContract.total_amount,
+            description: `Оплата по договору ${currentContract.contract_number}`,
+            return_url: window.location.origin + '/inzhener/payment-success.html?contract_id=' + currentContract.id,
+            contract_id: currentContract.id
+          })
+        });
+        
+        const result = await response.json();
+        console.log('Результат создания платежа:', result);
+        
+        if (result.success && result.confirmation_url) {
+          window.location.href = result.confirmation_url;
+        } else {
+          throw new Error(result.error || 'Не удалось создать платёж');
+        }
+      } catch (error) {
+        console.error('Ошибка:', error);
+        showToast('Ошибка при создании платежа: ' + error.message, 'error');
+        widgetContainer.innerHTML = '<p style="color: #ff5555;">Ошибка при создании платежа. Попробуйте позже.</p>';
+      }
+    }
+    
+    document.addEventListener('DOMContentLoaded', async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const contractId = urlParams.get('contract_id');
+      
+      if (!contractId) {
+        document.getElementById('paymentInfo').innerHTML = `
+          <p style="color: #ff5555;">❌ Не указан договор для оплаты</p>
+          <button onclick="window.location.href='cabinet/dashboard.html'" class="btn btn-primary" style="margin-top: 16px;">Вернуться в кабинет</button>
+        `;
+        return;
+      }
+      
+      let session = null;
+      if (typeof window.supabaseCheckAuth === 'function') {
+        session = await window.supabaseCheckAuth();
+      }
+      
+      if (!session) {
+        window.location.href = `cabinet/login.html?redirect=payment-confirm.html&contract_id=${contractId}`;
+        return;
+      }
+      
+      const loaded = await loadContract(contractId);
+      
+      if (loaded && currentContract) {
+        const cardMethod = document.getElementById('cardMethod');
+        const sbpMethod = document.getElementById('sbpMethod');
+        
+        cardMethod.addEventListener('click', () => {
+          cardMethod.classList.add('active');
+          sbpMethod.classList.remove('active');
+          createPayment();
+        });
+        
+        sbpMethod.addEventListener('click', () => {
+          sbpMethod.classList.add('active');
+          cardMethod.classList.remove('active');
+          createPayment();
+        });
+      }
+    });
+  </script>
+</body>
+</html>

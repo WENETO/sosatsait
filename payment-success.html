@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Оплата успешна | Инженерные системы Томск</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-client.js"></script>
+  <style>
+    .success-container {
+      max-width: 500px;
+      margin: 80px auto;
+      padding: 40px;
+      background: var(--bg-card);
+      border-radius: 32px;
+      border: 1px solid rgba(0, 194, 255, 0.3);
+      text-align: center;
+    }
+    .success-icon {
+      font-size: 4rem;
+      color: #00ffaa;
+      margin-bottom: 24px;
+    }
+    .success-container h1 {
+      color: var(--primary);
+      margin-bottom: 16px;
+    }
+    .success-container p {
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+    .btn-large {
+      padding: 14px 32px;
+      font-size: 1.1rem;
+    }
+    .back-link {
+      color: var(--primary);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 24px;
+    }
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 2px solid var(--primary);
+      border-top-color: transparent;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      margin-right: 8px;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="./" class="logo">
+        <i class="fas fa-microchip"></i>
+        <span>Инженерные системы</span>
+      </a>
+    </div>
+  </nav>
+
+  <div class="success-container" id="successContainer">
+    <div class="success-icon">
+      <i class="fas fa-spinner fa-pulse"></i>
+    </div>
+    <h1>Обработка оплаты...</h1>
+    <p>Пожалуйста, подождите, мы обновляем статус вашего заказа.</p>
+    <div class="loading"></div>
+  </div>
+
+  <script>
+    const SUPABASE_URL = 'https://dtuipgbsupodwvxlwmse.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0dWlwZ2JzdXBvZHd2eGx3bXNlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzMzUxNzIsImV4cCI6MjA4OTkxMTE3Mn0.ABaA7-D4jU_64bFGQQZc3J4-0TUH5Lz8PjhqobK8ZvI';
+    const TELEGRAM_BOT_TOKEN = '8686809545:AAE15NDVgh1PQzyrtWiQe4smbgs6BAVJ624';
+    const TELEGRAM_CHAT_ID = '2068108259';
+    
+    async function sendToTelegram(message) {
+      const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+      const data = {
+        chat_id: TELEGRAM_CHAT_ID,
+        text: message,
+        parse_mode: 'HTML'
+      };
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        const result = await response.json();
+        return result.ok === true;
+      } catch (error) {
+        console.error('Ошибка Telegram:', error);
+        return false;
+      }
+    }
+    
+    async function generatePDF(contractId) {
+      try {
+        const response = await fetch(`api/generate-pdf.php?contract_id=${contractId}`);
+        const result = await response.json();
+        return result.success ? result.pdf_url : null;
+      } catch (error) {
+        console.error('Ошибка генерации PDF:', error);
+        return null;
+      }
+    }
+    
+    async function sendPaymentNotification(contract, profile, amount) {
+      const message = `💰 <b>НОВАЯ ОПЛАТА!</b>\n\n` +
+        `📄 <b>Договор:</b> ${contract.contract_number}\n` +
+        `👤 <b>Клиент:</b> ${profile.full_name || 'Не указано'}\n` +
+        `📞 <b>Телефон:</b> ${profile.phone || 'Не указан'}\n` +
+        `📧 <b>Email:</b> ${profile.email || 'Не указан'}\n` +
+        `📍 <b>Объект:</b> ${contract.object_address || 'Не указан'}\n` +
+        `🔧 <b>Услуга:</b> ${contract.services || 'Монтаж инженерных систем'}\n` +
+        `💵 <b>Сумма:</b> ${amount.toLocaleString()} ₽\n` +
+        `⏰ <b>Дата оплаты:</b> ${new Date().toLocaleString('ru-RU')}`;
+      return await sendToTelegram(message);
+    }
+    
+    async function updateContractStatus(contractId) {
+      try {
+        // 1. Получаем договор
+        const contractResponse = await fetch(`${SUPABASE_URL}/rest/v1/contracts?id=eq.${contractId}`, {
+          headers: {
+            'apikey': SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+          }
+        });
+        const contracts = await contractResponse.json();
+        const contract = contracts[0];
+        if (!contract) throw new Error('Договор не найден');
+        
+        // 2. Обновляем статус договора на "signed"
+        await fetch(`${SUPABASE_URL}/rest/v1/contracts?id=eq.${contractId}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+          },
+          body: JSON.stringify({
+            status: 'signed',
+            signed_at: new Date().toISOString()
+          })
+        });
+        
+        // 3. Получаем профиль пользователя
+        const profileResponse = await fetch(`${SUPABASE_URL}/rest/v1/profiles?id=eq.${contract.user_id}`, {
+          headers: {
+            'apikey': SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+          }
+        });
+        const profiles = await profileResponse.json();
+        const profile = profiles[0] || {};
+        
+        // 4. Получаем email
+        const userResponse = await fetch(`${SUPABASE_URL}/rest/v1/auth/users?id=eq.${contract.user_id}`, {
+          headers: {
+            'apikey': SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+          }
+        });
+        const users = await userResponse.json();
+        profile.email = users[0]?.email || 'Не указан';
+        
+        // 5. СОЗДАЁМ ЗАПИСЬ В ПЛАТЕЖАХ (ВАЖНО!)
+        const paymentResponse = await fetch(`${SUPABASE_URL}/rest/v1/payments`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+          },
+          body: JSON.stringify({
+            contract_id: contract.id,
+            amount: contract.total_amount,
+            payment_method: 'card',
+            status: 'paid',
+            payment_date: new Date().toISOString().slice(0,10)
+          })
+        });
+        
+        if (!paymentResponse.ok) {
+          const errorText = await paymentResponse.text();
+          console.error('Ошибка создания платежа:', errorText);
+        } else {
+          console.log('✅ Запись в payments создана');
+        }
+        
+        // 6. Генерируем PDF
+        await generatePDF(contract.id);
+        
+        // 7. Отправляем уведомление в Telegram
+        await sendPaymentNotification(contract, profile, contract.total_amount);
+        
+        return true;
+      } catch (error) {
+        console.error('Ошибка обновления:', error);
+        return false;
+      }
+    }
+    
+    document.addEventListener('DOMContentLoaded', async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      let contractId = urlParams.get('contract_id');
+      
+      if (!contractId) {
+        const savedContractId = localStorage.getItem('last_paid_contract');
+        if (savedContractId) {
+          contractId = savedContractId;
+          localStorage.removeItem('last_paid_contract');
+        }
+      }
+      
+      if (contractId) {
+        console.log('Обновление статуса для договора:', contractId);
+        await updateContractStatus(contractId);
+      } else {
+        console.log('ID договора не найден');
+      }
+      
+      const container = document.getElementById('successContainer');
+      container.innerHTML = `
+        <div class="success-icon">
+          <i class="fas fa-check-circle"></i>
+        </div>
+        <h1>Оплата прошла успешно!</h1>
+        <p>Спасибо за доверие! Ваш заказ принят в работу. Договор подписан автоматически.</p>
+        <p>В ближайшее время с вами свяжется наш специалист для уточнения деталей.</p>
+        <a href="cabinet/dashboard.html" class="btn btn-primary btn-large">
+          <i class="fas fa-chart-line"></i> Перейти в личный кабинет
+        </a>
+        <br>
+        <a href="./" class="back-link">
+          <i class="fas fa-home"></i> Вернуться на главную
+        </a>
+      `;
+    });
+  </script>
+</body>
+</html>
